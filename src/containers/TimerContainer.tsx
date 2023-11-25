@@ -17,10 +17,13 @@ const TimerContainer = ({
 
   const handleChangeTimer = (event: ChangeEvent<HTMLInputElement>) => {
     const inputTime = parseInt(event.target.value, 10);
-    const newTime = inputTime > 60 ? 60 : inputTime;
-    const seconds = newTime * 60; // 분을 초로 변환
+    const newTime = inputTime > 90 ? 90 : inputTime;
 
     setInitTime(newTime);
+  };
+
+  const handleSetLeftTime = () => {
+    const seconds = initTime * 60; // 분을 초로 변환
     setLeftTime(seconds);
   };
 
@@ -69,7 +72,11 @@ const TimerContainer = ({
         />
       </div>
       <div className="w-full px-5 mt-5">
-        <StatusButton status={status} onChangeStatus={onChangeStatus} />
+        <StatusButton
+          status={status}
+          onChangeStatus={onChangeStatus}
+          onSetLeftTime={handleSetLeftTime}
+        />
       </div>
     </>
   );

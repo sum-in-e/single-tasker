@@ -3,9 +3,11 @@ import { Status } from ".";
 const StatusButton = ({
   status,
   onChangeStatus,
+  onSetLeftTime,
 }: {
   status: Status;
   onChangeStatus: (newStatus: Status) => void;
+  onSetLeftTime: () => void;
 }) => {
   const handleClickButton = (
     buttonType: "Start" | "Pause" | "Resume" | "Stop" | "Reset"
@@ -18,6 +20,7 @@ const StatusButton = ({
 
   const handelClickStart = () => {
     onChangeStatus("InProgress");
+    onSetLeftTime();
   };
 
   if (status === "InProgress") {

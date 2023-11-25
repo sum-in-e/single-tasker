@@ -26,7 +26,7 @@ const TimeDisplay = ({ status, initTime, leftTime, onChangeTimer }: Props) => {
         value={initTime}
         className="w-12 px-1 rounded-sm outline-none"
         onChange={onChangeTimer}
-        max={60}
+        max={90}
         min={0}
       />
     );
