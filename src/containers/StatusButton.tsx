@@ -3,11 +3,9 @@ import { Status } from ".";
 const StatusButton = ({
   status,
   onChangeStatus,
-  onSetLeftTime,
 }: {
   status: Status;
   onChangeStatus: (newStatus: Status) => void;
-  onSetLeftTime: () => void;
 }) => {
   const handleClickButton = (
     buttonType: "Start" | "Pause" | "Resume" | "Stop" | "Reset"
@@ -20,7 +18,6 @@ const StatusButton = ({
 
   const handelClickStart = () => {
     onChangeStatus("InProgress");
-    onSetLeftTime();
   };
 
   if (status === "InProgress") {
@@ -35,7 +32,7 @@ const StatusButton = ({
 
   if (status === "Paused") {
     return (
-      <div className="flex justify-between gap-2">
+      <div className="flex flex-col gap-1">
         <CommonButton
           text="이어하기"
           onClick={() => handleClickButton("Resume")}
@@ -71,7 +68,7 @@ const CommonButton = ({
 }) => {
   return (
     <button
-      className={`rounded-full py-1 w-full border border-emerald-400 font-semibold text-sm ${
+      className={`flex-shrink-0 rounded-full py-1 w-20 h-fit border border-emerald-400 font-semibold text-sm ${
         isFilled
           ? "bg-emerald-400 text-zinc-900"
           : "bg-transparent text-emerald-400"

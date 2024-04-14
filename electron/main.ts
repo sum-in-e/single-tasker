@@ -21,9 +21,13 @@ const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 200,
-    height: 300,
-    resizable: false,
+    width: 800,
+    maxWidth: 800,
+    minWidth: 600,
+    height: 105,
+    maxHeight: 105,
+    minHeight: 105,
+    resizable: true,
     alwaysOnTop: true, // 윈도우를 항상 최상위에 고정
 
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),

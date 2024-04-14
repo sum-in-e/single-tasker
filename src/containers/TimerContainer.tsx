@@ -1,7 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Status } from ".";
-import StatusButton from "./StatusButton";
-import TimeDisplay from "./TimeDisplay";
 
 const TimerContainer = ({
   status,
@@ -22,9 +20,15 @@ const TimerContainer = ({
     setInitTime(newTime);
   };
 
-  const handleSetLeftTime = () => {
-    const seconds = initTime * 60; // 분을 초로 변환
-    setLeftTime(seconds);
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    // 한 자릿수일 경우 앞에 '0'을 추가
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+    const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
+
+    return `${formattedMinutes}:${formattedSeconds}`;
   };
 
   const decreaseTime = useCallback(() => {
@@ -36,6 +40,19 @@ const TimerContainer = ({
   }, [leftTime, onChangeStatus]);
 
   useEffect(() => {
+    if (status === "InProgress" && leftTime === 0) {
+      // 최초 시작
+      const seconds = initTime * 60;
+      setLeftTime(seconds);
+    }
+
+    if (status === "NotStarted" && leftTime !== 0) {
+      setLeftTime(0);
+    }
+  }, [initTime, leftTime, status]);
+
+  useEffect(() => {
+    // TODO: leftTime이 줄어들면서 TimerContainer 컴포넌트는 계속 리렌더링되고 이 useEffect도 계속 실행되어 setInterval이 계속 된다. 해결 필요
     if (status === "InProgress") {
       intervalRef.current = setInterval(decreaseTime, 1000);
     } else if (status !== "NotStarted" && intervalRef.current) {
@@ -49,36 +66,31 @@ const TimerContainer = ({
     };
   }, [decreaseTime, status]);
 
-  const backgroundSize = `${360 - (360 * leftTime) / (initTime * 60)}deg`; // 배경 크기 계산
-
   return (
-    <>
-      <div
-        className={`border-2 rounded-full w-32 border-zinc-600 aspect-square flex justify-center items-center bg-transparent`}
-        style={{
-          background:
-            status === "InProgress" || status === "Paused"
-              ? `conic-gradient(
-        transparent ${backgroundSize}, 
-        #34d399 0 ${backgroundSize})`
-              : "",
-        }}
+    <div className="flex flex-col text-zinc-100 gap-1 flex-shrink-0 w-16">
+      <label
+        className={`text-[10px] ${
+          status !== "NotStarted" && "text-zinc-400"
+        } text-zinc-400"`}
       >
-        <TimeDisplay
-          status={status}
-          initTime={initTime}
-          leftTime={leftTime}
-          onChangeTimer={handleChangeTimer}
+        몇 분간 한다.
+      </label>
+
+      {status === "NotStarted" ? (
+        <input
+          type="number"
+          value={initTime}
+          className="bg-transparent border-b border-zinc-700 outline-none"
+          onChange={handleChangeTimer}
+          max={90}
+          min={0}
         />
-      </div>
-      <div className="w-full px-5 mt-5">
-        <StatusButton
-          status={status}
-          onChangeStatus={onChangeStatus}
-          onSetLeftTime={handleSetLeftTime}
-        />
-      </div>
-    </>
+      ) : (
+        <div className="bg-transparent border-b h-full border-zinc-700 outline-none">
+          {status !== "Finished" ? formatTime(leftTime) : "Done🎉"}
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { Status } from ".";
 
-const TaskInput = ({ status }: { status: Status }) => {
-  const [task, setTask] = useState("");
+const ReasonInput = ({ status }: { status: Status }) => {
+  const [reason, setReason] = useState("");
 
-  const handleChangeTask = (event: ChangeEvent<HTMLInputElement>) => {
-    setTask(event.target.value);
+  const handleChangeReason = (event: ChangeEvent<HTMLInputElement>) => {
+    setReason(event.target.value);
   };
 
   return (
@@ -15,17 +15,17 @@ const TaskInput = ({ status }: { status: Status }) => {
           status !== "NotStarted" && "text-zinc-400"
         } text-zinc-400"`}
       >
-        어떤 일을
+        무엇을 위해서
       </label>
       <input
         className="bg-transparent border-b border-zinc-700 outline-none"
-        onChange={handleChangeTask}
-        value={task}
-        placeholder="면접 준비를"
+        onChange={handleChangeReason}
+        value={reason}
+        placeholder="XX 회사에 입사하기 위해서"
         readOnly={status === "NotStarted" ? false : true}
       />
     </div>
   );
 };
 
-export default TaskInput;
+export default ReasonInput;
